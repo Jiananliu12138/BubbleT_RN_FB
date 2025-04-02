@@ -6,7 +6,7 @@ import { reactiveModel } from "/src/bootstrapping"  // src/boostrapping also wor
 export default function IndexPage() { 
     return (
         <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-          <Text>Hello React Native!</Text>
+          <Text>Hello React Native Test!</Text>
           {/* <Button
             title="AiChat"
             onPress={() => router.push("/AiChat")}
