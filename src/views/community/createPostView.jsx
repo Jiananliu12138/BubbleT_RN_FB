@@ -19,16 +19,16 @@ import { StatusBar } from "expo-status-bar";
 
 // Color scheme - consistent with map page
 const COLORS = {
-  primary: "#f8ca69",      // Main color: Yellow background (originally #a7b794 light green)
-  darkGreen: "#f7bd10",    // Dark tone: Deep yellow (originally #667761 dark green)
-  accent: "#f7bd10",       // Accent color: Deep yellow (originally #8a2be2 purple)
-  accentLight: "#f8ca69",  // Lighter accent color (originally #b57eeb light purple)
-  background: "#f8ca69",   // Background color: Yellow (originally #a7b794 light green)
+  primary: "#f8ca69",      // Main color: Yellow background
+  darkGreen: "#f7bd10",    // Dark tone: Deep yellow
+  accent: "#f7bd10",       // Accent color: Deep yellow
+  accentLight: "#f8ca69",  // Lighter accent color
+  background: "#f8ca69",   // Background color: Yellow
   cardBackground: "#fff",  // Card background: White
   text: "#333333",         // Main text: Dark gray
   textSecondary: "#666666",// Secondary text: Medium gray
-  border: "#000000",       // Border color: Black (originally #e0e0e0 light gray)
-  highlight: "#f7bd10",    // Highlight color: Deep yellow (originally #24c960 bright green)
+  border: "#000000",       // Border color: Black
+  highlight: "#f7bd10",    // Highlight color: Deep yellow
 };
 
 // Get screen dimensions
@@ -94,7 +94,7 @@ export function CreatePostView(props) {
           style={styles.addImagesPlaceholder}
           onPress={onPickImages}
         >
-          <Ionicons name="images-outline" size={60} color="rgba(255,255,255,0.7)" />
+          <Ionicons name="images-outline" size={40} color="rgba(255,255,255,0.7)" />
           <Text style={styles.addImagesText}>Add Images</Text>
           <Text style={styles.addImagesSubtext}>Add up to 9 images</Text>
         </TouchableOpacity>
@@ -141,27 +141,34 @@ export function CreatePostView(props) {
         </TouchableOpacity>
       </View>
 
-      <ScrollView style={styles.content}>
-        {/* Image preview area - top */}
-        {renderImagePreview()}
+      <View style={styles.contentContainer}>
+        {/* Split content into two sections: 30% image area and 70% text area */}
         
-        {/* Thumbnail list */}
-        {renderThumbnails()}
-        
-        {/* Text content area - bottom */}
-        <View style={styles.textContainer}>
-          <TextInput
-            style={styles.textInput}
-            placeholder="Share your thoughts..."
-            placeholderTextColor="rgba(0,0,0,0.4)"
-            multiline
-            value={postBody}
-            onChangeText={onPostBodyChange}
-            autoFocus={Platform.OS !== "web"}
-            maxLength={2000}
-          />
+        {/* Image section - 30% */}
+        <View style={styles.imageSection}>
+          {/* Image preview area */}
+          {renderImagePreview()}
+          
+          {/* Thumbnail list */}
+          {renderThumbnails()}
         </View>
-      </ScrollView>
+        
+        {/* Text section - 70% */}
+        <View style={styles.textSection}>
+          <View style={styles.textContainer}>
+            <TextInput
+              style={styles.textInput}
+              placeholder="Share your thoughts..."
+              placeholderTextColor="rgba(0,0,0,0.4)"
+              multiline
+              value={postBody}
+              onChangeText={onPostBodyChange}
+              autoFocus={Platform.OS !== "web"}
+              maxLength={2000}
+            />
+          </View>
+        </View>
+      </View>
 
       {/* Bottom toolbar */}
       <View style={styles.toolbar}>
@@ -214,14 +221,24 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 14
   },
-  content: {
+  // New container for split layout
+  contentContainer: {
     flex: 1,
+    flexDirection: "column", // Stack image section on top of text section
   },
-  // Xiaohongshu style - image preview area
+  // Image section - 30% of available height
+  imageSection: {
+    flex: 0.3, // 30% of the space
+    backgroundColor: "#fff"
+  },
+  // Text section - 70% of available height
+  textSection: {
+    flex: 0.7, // 70% of the space
+    backgroundColor: "#fff"
+  },
+  // Image elements
   addImagesPlaceholder: {
-    width: "100%",
-    height: "100%",
-    aspectRatio: 1,
+    flex: 1,
     backgroundColor: COLORS.darkGreen,
     justifyContent: 'center',
     alignItems: 'center',
@@ -231,15 +248,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginTop: 10,
+    textAlign: 'center',
   },
   addImagesSubtext: {
     color: 'rgba(255,255,255,0.7)',
     fontSize: 12,
     marginTop: 4,
+    textAlign: 'center',
   },
   selectedImageContainer: {
-    width: "100%",
-    aspectRatio: 1,
+    flex: 1,
     backgroundColor: '#000',
   },
   selectedImage: {
@@ -248,13 +266,16 @@ const styles = StyleSheet.create({
   },
   // Thumbnail list
   thumbnailsContainer: {
-    padding: "2.5%",
+    padding: "2%",
     backgroundColor: 'white',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0',
+    maxHeight: 80,
   },
   thumbnailItem: {
-    width: "15%",
-    aspectRatio: 1,
-    marginRight: "2%",
+    width: 60,
+    height: 60,
+    marginRight: 8,
     borderRadius: 3,
     borderWidth: 1,
     borderColor: '#e0e0e0',
@@ -281,14 +302,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     padding: "4%",
-    minHeight: "50%",
   },
   textInput: {
+    flex: 1,
     fontSize: 16,
     color: '#333',
     lineHeight: 22,
     textAlignVertical: 'top',
-    height: '100%',
   },
   // Bottom toolbar
   toolbar: {

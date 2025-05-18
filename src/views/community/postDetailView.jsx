@@ -133,7 +133,7 @@ export function PostDetailView(props) {
     
     if (item.type === 'video') {
       return (
-        <View style={styles.mediaItem}>
+        <View style={[styles.mediaItem, { width: screenWidth }]}>
           <Video
             source={{ uri: item.uri }}
             style={styles.videoPlayer}
@@ -146,11 +146,11 @@ export function PostDetailView(props) {
     } else {
       // Default to image type
       return (
-        <View style={styles.mediaItem}>
+        <View style={[styles.mediaItem, { width: screenWidth }]}>
           <Image
             source={{ uri: item.uri }}
             style={styles.mediaImage}
-            resizeMode="cover"
+            resizeMode="contain"
           />
         </View>
       );
@@ -396,23 +396,26 @@ const styles = StyleSheet.create({
   },
   mediaContainer: {
     width: '100%',
-    aspectRatio: 1,
-    backgroundColor: '#000',
+    height: undefined, // Remove fixed height constraint
+    aspectRatio: 1, // Maintain square aspect ratio
+    backgroundColor: '#f5f5f5', // Lighter background for media container
     position: 'relative'
   },
   mediaItem: {
-    width: '100%',
-    aspectRatio: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    height: undefined, // Remove fixed height
+    aspectRatio: 1, // Keep aspect ratio
   },
   mediaImage: {
     width: '100%',
     height: '100%',
+    maxHeight: Dimensions.get('window').width, // Limit max height to screen width
   },
   videoPlayer: {
     width: '100%',
     height: '100%',
+    maxHeight: Dimensions.get('window').width, // Limit max height to screen width
   },
   invalidMediaItem: {
     backgroundColor: '#f0f0f0',
