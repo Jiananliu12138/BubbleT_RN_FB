@@ -1,23 +1,13 @@
-// AiChatPresenter.js
 import { observer } from "mobx-react-lite";
 import { AiChatView } from "../views/AiChatView";
 
-/**
- * Presenter component for AI Chat feature
- * Handles business logic and coordinates between View and Model
- */
-export const AiChatPresenter = observer(function AiChat(props) {
-  /**
-   * Handles message submission and recommendation generation
-   * @param {Object} params - User input parameters
-   * @param {string} params.query - User's text input
-   * @param {string} params.type - Selected recommendation type
-   */
-  const { AiChatModel } = props
+export const AiChatPresenter = observer(function AiChatPresenter(props) {
+  const { AiChatModel } = props;
+
   const handleSend = async (params) => {
     try {
       AiChatModel.setLoading(true);
-      
+
       // Add user message to chat history
       AiChatModel.addMessage({
         id: Date.now(),
@@ -28,13 +18,13 @@ export const AiChatPresenter = observer(function AiChat(props) {
 
       // Generate recommendations through model
       const recommendation = await AiChatModel.generateRecommendation(params);
-      
+
       // Add AI response to chat history
       AiChatModel.addMessage({
         id: `rec_${Date.now()}`,
         isUser: false,
         content: recommendation,
-        image: recommendation.imageUrl
+        image: recommendation.image // 使用 base64 编码的 image 字段
       });
 
     } catch (error) {

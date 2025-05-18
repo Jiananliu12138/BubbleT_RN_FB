@@ -1,0 +1,30 @@
+{
+  "expo": {
+    "name": "bubble-tea-collector",
+    "slug": "bubble-tea-collector",
+    "version": "1.0.0",
+    "android": {
+      "package": "com.bubbletea.collector"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "bundleIdentifier": "com.bubbletea.collector"
+    },
+    "web": {
+      "favicon": "./src/assets/favicon.png",
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "scheme": "bubbletea",
+    "extra": {
+      "eas": {
+        "projectId": "your-eas-project-id"
+      }
+    },
+    "owner": "122gdhfu"
+  }
+}

@@ -1,6 +1,25 @@
 import React, { useState } from "react";
 import { StyleSheet, View, FlatList, Image, ActivityIndicator, Text, TouchableOpacity, Animated } from "react-native";
-import { Bubble, MessageInput } from "../AiChatUiLib.js";
+import { Bubble, MessageInput } from "../scripts/AiChatUiLib.js";
+import { ScrollView } from "react-native";
+
+const COLORS = {
+  primary: "#f8ca69",      // 主色调：黄色
+  primaryDark: "#f7bd10",  // 深一点的主色调：深黄色
+  accent: "#666666",       
+  accentLight: "#f8ca69",  // 浅一点的强调色：浅黄色
+  background: "#f8ca69",   // 背景色：黄色
+  cardBackground: "#f7bd10", // 卡片背景：深黄色
+  text: "#333333",         // 主要文本：深灰色
+  textSecondary: "#666666",// 次要文本：中灰色
+  border: "#000000",       // 边框色：黑色
+  success: "#4caf50",      // 成功色：绿色
+  favorite: "#f05c8d",      // 收藏色：粉红色
+  textbutton: "#cf9d00",
+  textbuttonactive:"#ffcd00",
+  sendbutton: "#dcbf60",
+  
+};
 
 export function AiChatView ({
   chatHistory,
@@ -23,7 +42,7 @@ export function AiChatView ({
       ) : (
         <RecommendationMessage 
           recommendation={item.content}
-          imageUrl={item.image}
+          image={item.image} // 传递 base64 图像数据
         />
       )}
     </View>
@@ -54,7 +73,7 @@ export function AiChatView ({
 };
 
 // RecommendationMessage Component with Accordion
-const RecommendationMessage = ({ recommendation, imageUrl }) => {
+const RecommendationMessage = ({ recommendation, image }) => {
   const [prepExpanded, setPrepExpanded] = useState(false);
   const [flavorExpanded, setFlavorExpanded] = useState(false);
   const prepHeight = useState(new Animated.Value(0))[0];
@@ -80,9 +99,9 @@ const RecommendationMessage = ({ recommendation, imageUrl }) => {
 
   return (
     <View style={styles.recommendationContainer}>
-      {imageUrl && (
+      {image && (
         <Image 
-          source={{ uri: imageUrl }}
+          source={{ uri: `data:image/jpeg;base64,${image}` }} // 使用 base64 格式的 URI
           style={styles.previewImage}
           resizeMode="contain"
         />
@@ -95,9 +114,15 @@ const RecommendationMessage = ({ recommendation, imageUrl }) => {
           <Text style={styles.accordionTitle}>Preparation {prepExpanded ? "▲" : "▼"}</Text>
         </TouchableOpacity>
         <Animated.View style={[styles.accordionContent, { height: prepHeight }]}>
-          {recommendation.instructions.map((step, index) => (
-            <Text key={index} style={styles.stepText}>• {step}</Text>
-          ))}
+          <ScrollView 
+            nestedScrollEnabled 
+            contentContainerStyle={styles.scrollContent}
+            showsVerticalScrollIndicator={false}
+          >
+            {recommendation.instructions.map((step, index) => (
+              <Text key={index} style={styles.stepText}>• {step}</Text>
+            ))}
+          </ScrollView>
         </Animated.View>
 
         {/* Flavor Profile Accordion */}
@@ -124,7 +149,8 @@ const ChatInput = ({ onSend, isLoading, selectedType, onTypeChange }) => {
     if (inputText.trim()) {
       onSend({
         query: inputText,
-        type: ["existing_recipes", "new_creations"][selectedType]
+        type: ["existing_recipes", "new_creations"][selectedType],
+        database: [] //TODO
       });
       setInputText("");
     }
@@ -156,9 +182,9 @@ const ChatInput = ({ onSend, isLoading, selectedType, onTypeChange }) => {
         onChangeText={setInputText}
         onSubmitEditing={handleSubmit}
         placeholder="Describe your milk tea needs..."
-        placeholderTextColor="#64748b"
+        placeholderTextColor={COLORS.textSecondary}
         accessoryRight={isLoading ? (
-          <ActivityIndicator size="small" color="#6366f1" />
+          <ActivityIndicator size="small" color={COLORS.accent} />
         ) : undefined}
         submitButtonStyle={styles.submitButton}
       />
@@ -176,7 +202,7 @@ const ErrorToast = ({ message }) => (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8fafc',
+    backgroundColor: COLORS.background,
   },
   listContent: {
     paddingVertical: 16,
@@ -189,10 +215,10 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   recommendationContainer: {
-    backgroundColor: 'white',
+    backgroundColor: COLORS.cardBackground,
     borderRadius: 14,
     padding: 16,
-    shadowColor: '#000',
+    shadowColor: COLORS.border,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 6,
@@ -209,34 +235,38 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '600',
-    color: '#1e293b',
+    color: COLORS.text,
     marginBottom: 12,
   },
   accordionTitle: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#6366f1',
+    color: COLORS.accent,
     marginVertical: 8,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    minHeight: 100
   },
   accordionContent: {
     overflow: 'hidden',
   },
   stepText: {
     fontSize: 15,
-    color: '#475569',
+    color: COLORS.textSecondary,
     lineHeight: 22,
     marginLeft: 8,
   },
   flavorText: {
     fontSize: 15,
-    color: '#64748b',
+    color: COLORS.textSecondary,
     fontWeight: '500',
   },
   inputContainer: {
     padding: 20,
-    backgroundColor: 'white',
+    backgroundColor: COLORS.cardBackground,
     borderTopWidth: 1,
-    borderColor: '#e2e8f0',
+    borderColor: COLORS.border,
   },
   segmentedControl: {
     flexDirection: 'row',
@@ -244,27 +274,30 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: '#6366f1',
+    borderColor: COLORS.border,
   },
   segmentButton: {
     flex: 1,
     paddingVertical: 10,
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.textbutton,
     alignItems: 'center',
   },
   segmentButtonActive: {
-    backgroundColor: '#6366f1',
+    flex: 1,
+    paddingVertical: 10,
+    backgroundColor: COLORS.textbuttonactive,
+    alignItems: 'center',
   },
   segmentText: {
     fontSize: 14,
-    color: '#6366f1',
+    color: COLORS.accent,
   },
   segmentTextActive: {
-    color: '#fff',
+    color: COLORS.textSecondary,
     fontWeight: '600',
   },
   userBubble: {
-    backgroundColor: '#6366f1',
+    backgroundColor: COLORS.primaryDark,
     maxWidth: '85%',
     paddingVertical: 12,
     paddingHorizontal: 18,
@@ -272,13 +305,13 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     textAlign: 'center',
-    color: '#94a3b8',
+    color: COLORS.textSecondary,
     paddingHorizontal: 40,
     fontSize: 16,
     lineHeight: 24,
   },
   submitButton: {
-    backgroundColor: '#6366f1',
+    backgroundColor: COLORS.sendbutton,
     borderRadius: 20,
     paddingVertical: 10,
   },

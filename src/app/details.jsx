@@ -1,13 +1,13 @@
-// src/app/index.jsx
+// src/app/details.jsx
 import { View } from "react-native";
 import { observer } from "mobx-react-lite";
 import { reactiveModel } from "../bootstrapping";
-import { Home } from "../presenters/homePresenter";
+import { Details } from "../presenters/detailsPresenter";
 
-export default observer(function IndexPage() {
+export default observer(function DetailsPage() {
   return (
     <View style={{ flex: 1 }}>
-      <Home model={reactiveModel} />
+      <Details model={reactiveModel} />
     </View>
   );
 });

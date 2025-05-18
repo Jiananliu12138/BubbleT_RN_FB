@@ -1,13 +1,13 @@
-// src/app/index.jsx
+// src/app/favorites.jsx
 import { View } from "react-native";
 import { observer } from "mobx-react-lite";
 import { reactiveModel } from "../bootstrapping";
-import { Home } from "../presenters/homePresenter";
+import { Favorites } from "../presenters/favoritesPresenter";
 
-export default observer(function IndexPage() {
+export default observer(function FavoritesPage() {
   return (
     <View style={{ flex: 1 }}>
-      <Home model={reactiveModel} />
+      <Favorites model={reactiveModel} />
     </View>
   );
 });
