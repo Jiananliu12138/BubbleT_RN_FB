@@ -140,7 +140,7 @@ export function OnboardingView({ onComplete }) {
   const renderSlide = ({ item }) => {
     return (
       <View style={[styles.slide, { width }]}>
-        <Image source={item.image} style={styles.image} resizeMode="cover" />
+        <Image source={item.image} style={styles.fullScreenImage} resizeMode="cover" />
       </View>
     );
   };
@@ -209,7 +209,7 @@ export function OnboardingView({ onComplete }) {
           offset: width * index,
           index,
         })}
-        style={{ width }}
+        style={styles.fullWidthList}
       />
 
       <Pagination />
@@ -247,16 +247,24 @@ export function OnboardingView({ onComplete }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#FFF6E0", // 改为黑色背景以避免图片加载时的白边
   },
   slide: {
     height,
+    width,
     justifyContent: "center",
     alignItems: "center",
+    position: "relative",
   },
-  image: {
+  fullScreenImage: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+  },
+  fullWidthList: {
     width,
-    height,
   },
   paginationContainer: {
     flexDirection: "row",
@@ -265,6 +273,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 100,
     alignSelf: "center",
+    zIndex: 10,
   },
   dot: {
     height: 8,
@@ -279,6 +288,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     paddingHorizontal: 20,
+    zIndex: 10,
   },
   skipButton: {
     padding: 12,
