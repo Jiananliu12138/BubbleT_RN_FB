@@ -1,6 +1,8 @@
 # Bubble Tea Enthusiast App - README
+Web version: https://id2216-ef6a7.web.app Links to an external site.
 
-## 🧋 App Overview
+Codesandbox: https://codesandbox.io/p/devbox/dh2642-expo-forked-p58c5h?workspaceId=ws_PkJgqTNf7nXCQbajk7Eihm
+## 📱 App Overview
 
 The Bubble Tea Enthusiast app is your ultimate companion for discovering, exploring, and saving your favorite bubble tea recipes and flavors. With a beautiful yellow-themed UI and intuitive navigation, this app helps bubble tea lovers discover new flavors and keep track of their favorites.
 
